@@ -1,0 +1,115 @@
+### Create user "eliska"
+POST http://{{host}}/users
+Authorization: Basic YWRtaW46MTIz
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "eliska",
+  "password": "21"
+}
+
+> {%
+    client.test("User has been successfully created", function() {
+        client.assert(response.status === 200)
+    })
+%}
+
+### Create first flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "front": "Co je bunka?",
+  "back": "Je to zakladni jednotka"
+}
+
+> {%
+    client.test("Flashcard has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Create second flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "front": "Co je krabsuv cyklus?",
+  "back": "Je to prilis slozita vec"
+}
+
+> {%
+    client.test("Flashcard has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Create first tag for user "eliska"
+POST http://{{host}}/users/eliska/tags
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "FAV"
+}
+
+> {%
+    client.test("Tag has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Create second tag for user "eliska"
+POST http://{{host}}/users/eliska/tags
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "BAD"
+}
+
+> {%
+    client.test("Tag has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Add first tag to first the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/1/tags/1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Add first tag to second the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/2/tags/1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Add second tag to second the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/2/tags/2
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Remove tag from flashcard
+DELETE http://{{host}}/users/eliska/flashcards/2/tags/1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Get flashcards with first tags ...
+GET http://{{host}}/users/eliska/flashcards?tags=1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+
+

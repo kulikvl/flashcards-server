@@ -1,0 +1,12 @@
+### Get all users
+GET http://{{host}}/users
+Authorization: Basic YWRtaW46MTIz
+Accept: application/json
+
+### Get user "user1"
+GET http://{{host}}/users/user1
+Authorization: Basic YWRtaW46MTIz
+Accept: application/json
+
+
+

@@ -1,0 +1,25 @@
+### Get all users
+GET http://{{host}}/users
+Authorization: Basic HOVNO
+Accept: application/json
+
+> {%
+    client.test("User does not have role ADMIN", function() {
+        client.assert(response.status === 401)
+    });
+%}
+
+### Get user that does not exist
+GET http://{{host}}/users/nonexistingusername
+Authorization: Basic YWRtaW46MTIz
+Accept: application/json
+
+> {%
+    client.test("user does not exist", function() {
+        client.assert(response.status === 404)
+    });
+    client.test("user body contains not found", function() {
+        client.assert(response.body["error"].toLowerCase() === "not found")
+    })
+%}
+

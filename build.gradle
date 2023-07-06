@@ -6,6 +6,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+group = 'flashcards.server'
+version = '0.0.1-SNAPSHOT'
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
@@ -18,5 +20,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'org.postgresql:postgresql'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testRuntimeOnly 'com.h2database:h2'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
