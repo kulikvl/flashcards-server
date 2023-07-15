@@ -13,7 +13,10 @@ public interface FlashcardJpaRepository extends JpaRepository<Flashcard, Long> {
 
     Collection<Flashcard> findAllByAuthorUsername(String userId);
 
-    @Query("SELECT f FROM Flashcard f JOIN f.tags t WHERE t.id IN :tagIds AND f.author.username = :userId")
+    @Query("SELECT DISTINCT f FROM Flashcard f JOIN f.tags t WHERE t.id IN :tagIds AND f.author.username = :userId")
     Collection<Flashcard> findAllByAuthorUsernameWithTags(@Param("userId") String userId, @Param("tagIds") Collection<Integer> tagIds);
+
+    @Query("SELECT DISTINCT f FROM Flashcard f JOIN f.tags t WHERE t.id IN :tagIds")
+    Collection<Flashcard> findAllWithTags(@Param("tagIds") Collection<Integer> tagIds);
 
 }

@@ -20,21 +20,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.sessionManagement()
+        http    .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .csrf().disable();
 
 //        // permit all requests
-//        http.authorizeRequests()
+//        http    .authorizeRequests()
 //                .anyRequest()
 //                .permitAll();
 
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
-                .antMatchers("/users").hasRole("ADMIN")
-                .antMatchers("/users/*").hasRole("ADMIN")
+        http    .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/users/register", "/users/authenticate").permitAll()
+                .antMatchers("/users", "/users/*").hasRole("ADMIN")
                 .antMatchers("/**").hasRole("USER")
                 .and()
                 .httpBasic();
@@ -42,6 +40,7 @@ public class SecurityConfig {
         return http.build();
     }
 
+    // TODO: Remove when database is persistent
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager conf = new JdbcUserDetailsManager(dataSource);
@@ -79,7 +78,7 @@ public class SecurityConfig {
 
 //    // in-memory users storage
 //    @Bean
-//    public UserDetailsManager userDetailsService() { // return UserDetailsService ?
+//    public UserDetailsManager userDetailsService() {
 //
 //        UserDetails user = User.withDefaultPasswordEncoder()
 //                .username("user")

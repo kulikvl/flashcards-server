@@ -1,6 +1,5 @@
 package flashcards.server.dao.jpa;
 
-import flashcards.server.domain.Flashcard;
 import flashcards.server.domain.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +15,5 @@ public interface TagJpaRepository extends JpaRepository<Tag, Integer> {
 
     @Query("SELECT f.tags FROM Flashcard f WHERE f.id = :flashcardId")
     Collection<Tag> findAllByFlashcardId(@Param("flashcardId") Long flashcardId);
+
 }

@@ -11,6 +11,16 @@ public class TagDto {
 
     private String authorUsername;
 
+    public TagDto() {
+
+    }
+
+    public TagDto(Integer id, String name, String authorUsername) {
+        this.id = id;
+        this.name = name;
+        this.authorUsername = authorUsername;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -33,6 +43,21 @@ public class TagDto {
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TagDto tag = (TagDto) o;
+
+        return getId() != null ? getId().equals(tag.getId()) : tag.getId() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getId() != null ? getId().hashCode() : 0;
     }
 
 }

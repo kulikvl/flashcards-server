@@ -1,0 +1,162 @@
+### Create user "eliska"
+POST http://{{host}}/users
+Authorization: Basic YWRtaW46MTIz
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "eliska",
+  "password": "21"
+}
+
+> {%
+    client.test("User has been successfully created", function() {
+        client.assert(response.status === 200)
+    })
+%}
+
+### Create first flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "front": "Co je bunka?",
+  "back": "Je to zakladni jednotka"
+}
+
+> {%
+    client.test("Flashcard has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Create second flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "front": "Co je krabsuv cyklus?",
+  "back": "Je to prilis slozita vec"
+}
+
+### Create first tag for user "eliska"
+POST http://{{host}}/users/eliska/tags
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Fav"
+}
+
+> {%
+    client.test("Tag has been created", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Create second tag for user "eliska"
+POST http://{{host}}/users/eliska/tags
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Hard"
+}
+
+### Add the first tag to first the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/1/tags/1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("OK", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Add the first tag to the second the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/2/tags/1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Add the second tag to the second flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/2/tags/2
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Add the second tag to first the flashcard for user "eliska"
+POST http://{{host}}/users/eliska/flashcards/1/tags/2
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+### Remove the second tag from the first flashcard for user "eliska"
+DELETE http://{{host}}/users/eliska/flashcards/1/tags/2
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("OK", function() {
+        client.assert(response.status === 200)
+    });
+%}
+
+### Get flashcards with the first tag
+GET http://{{host}}/users/eliska/flashcards?tags=1
+Authorization: Basic ZWxpc2thOjIx
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("OK", function() {
+        client.assert(response.status === 200)
+    });
+    client.test("Two flashcards", function() {
+        const expectedJson = [
+            {
+                "id": 1,
+                "front": "Co je bunka?",
+                "back": "Je to zakladni jednotka",
+                "tags": [
+                    {
+                        "id": 1,
+                        "name": "Fav",
+                        "authorUsername": "eliska"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Hard",
+                        "authorUsername": "eliska"
+                    }
+                ],
+                "authorUsername": "eliska"
+            },
+            {
+                "id": 2,
+                "front": "Co je krabsuv cyklus?",
+                "back": "Je to prilis slozita vec",
+                "tags": [
+                    {
+                        "id": 1,
+                        "name": "Fav",
+                        "authorUsername": "eliska"
+                    }
+                ],
+                "authorUsername": "eliska"
+            }
+        ];
+
+        client.assert(JSON.stringify(response.body) === JSON.stringify(expectedJson), "Response body should match expected JSON");
+    })
+%}
+

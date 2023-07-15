@@ -1,26 +1,19 @@
 package flashcards.server.api;
 
-import flashcards.server.api.dto.TagDto;
 import flashcards.server.api.dto.UserDto;
 import flashcards.server.business.EntityStateException;
 import flashcards.server.domain.User;
 import flashcards.server.business.UserService;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
@@ -34,15 +27,9 @@ public class UserController extends AbstractController<User, UserDto, String> {
     public UserController(UserService service) {
         super(
                 service,
-                e -> {
-                    UserDto dto = new UserDto();
-                    dto.setUsername(e.getUsername());
-                    dto.setPassword(e.getPassword());
-                    return dto;
-                },
+                e -> new UserDto(e.getUsername(), e.getPassword()),
                 d -> new User(d.getUsername(), d.getPassword())
         );
-
     }
 
     @PostMapping
@@ -78,7 +65,7 @@ public class UserController extends AbstractController<User, UserDto, String> {
     )
     public UserDto readOne(@PathVariable String id) {
         try {
-            return toDtoConverter.apply(service.readById(id).get());
+            return toDtoConverter.apply(service.readById(id).orElseThrow());
         } catch (NoSuchElementException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
@@ -88,27 +75,25 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @Operation(
             summary = "Update the user (only for admins)",
             security = {@SecurityRequirement(name = "basicAuth")},
-            responses = {@ApiResponse(responseCode = "204", description = "Resource has been updated"), @ApiResponse(responseCode = "404", description = "User not found")}
+            responses = {@ApiResponse(responseCode = "200", description = "User has been updated"), @ApiResponse(responseCode = "404", description = "User not found")}
     )
     public void update(@RequestBody UserDto dto) {
         try {
             service.update(toEntityConverter.apply(dto));
-        } catch (NoSuchElementException e) {
+        } catch (EntityStateException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete the user (only for admins)",
             security = {@SecurityRequirement(name = "basicAuth")}, // equivalent to separate annotation @SecurityRequirement(name = "basicAuth")
-            responses = {@ApiResponse(responseCode = "204", description = "User has been deleted")} // equivalent to separate annotation @ResponseStatus(HttpStatus.NO_CONTENT)
+            responses = {@ApiResponse(responseCode = "200", description = "User has been deleted")} // but 204 = equivalent to separate annotation @ResponseStatus(HttpStatus.NO_CONTENT)
     )
     public void delete(@PathVariable String id) {
         service.deleteById(id);
     }
-
 
     @PostMapping("/register")
     @Operation(
@@ -123,6 +108,21 @@ public class UserController extends AbstractController<User, UserDto, String> {
         }
     }
 
+    @PostMapping("/authenticate")
+    @Operation(
+            summary = "Authenticate the user",
+            responses = {@ApiResponse(responseCode = "200", description = "User has been successfully authenticated and his roles are returned"), @ApiResponse(responseCode = "403", description = "Authentication failed")}
+    )
+    public Collection<String> authenticate(@RequestBody UserDto dto) {
+        try {
+            return ((UserService)service).authenticate(dto.getUsername(), dto.getPassword());
+        } catch (BadCredentialsException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
+
+
+    // Just a list of all useful swagger annotations:
 //    @PutMapping("/test/{pv1}")
 //    // @Operation is wrapper interface
 //    @Operation(

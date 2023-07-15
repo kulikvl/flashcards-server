@@ -1,15 +1,12 @@
 package flashcards.server.business;
 
-import flashcards.server.dao.jpa.FlashcardJpaRepository;
 import flashcards.server.dao.jpa.TagJpaRepository;
 import flashcards.server.domain.Flashcard;
 import flashcards.server.domain.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.Collection;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
 
 @Service
 public class TagService extends AbstractCrudService<Tag, Integer> {
@@ -30,27 +27,49 @@ public class TagService extends AbstractCrudService<Tag, Integer> {
         return ((TagJpaRepository) repository).findAllByFlashcardId(flashcardId);
     }
 
-    public void addTagToFlashcard(Integer tagId, Long flashcardId) {
+    @Transactional
+    public void addTagToFlashcard(Integer tagId, Long flashcardId) throws EntityStateException {
         Optional<Tag> optionalTag = readById(tagId);
         Optional<Flashcard> optionalFlashcard = flashcardService.readById(flashcardId);
 
-        Tag tag = optionalTag.orElseThrow(); // throws NoSuchElementException if the Optional is empty
-        Flashcard flashcard = optionalFlashcard.orElseThrow();
+        Tag tag = optionalTag.orElseThrow(() -> new EntityStateException("Tag with id " + tagId + " does not exist")); // by default throws NoSuchElementException if the Optional is empty
+        Flashcard flashcard = optionalFlashcard.orElseThrow(() -> new EntityStateException("Flashcard with id " + flashcardId + " does not exist"));
+
         flashcard.addTag(tag);
 
         flashcardService.update(flashcard);
     }
 
-    public void removeTagFromFlashcard(Integer tagId, Long flashcardId) {
+    @Transactional
+    public void removeTagFromFlashcard(Integer tagId, Long flashcardId) throws EntityStateException {
         Optional<Tag> optionalTag = readById(tagId);
         Optional<Flashcard> optionalFlashcard = flashcardService.readById(flashcardId);
 
-        Tag tag = optionalTag.orElseThrow(); // throws NoSuchElementException if the Optional is empty
-        Flashcard flashcard = optionalFlashcard.orElseThrow();
+        Tag tag = optionalTag.orElseThrow(() -> new EntityStateException("Tag with id " + tagId + " does not exist")); // by default throws NoSuchElementException if the Optional is empty
+        Flashcard flashcard = optionalFlashcard.orElseThrow(() -> new EntityStateException("Flashcard with id " + flashcardId + " does not exist"));
 
         flashcard.removeTag(tag);
 
         flashcardService.update(flashcard);
+    }
+
+    /*
+        Spring Data Jpa's repository methods such as save(), delete(), ... are @Transactional.
+        But if we are dealing with multiple operations that should be part of a single transaction (like here)
+        We should use @Transactinoal at the service method level
+        We have operations: findById, removeTagFromFlashcard, deleteTag
+     */
+    @Override
+    @Transactional
+    public void deleteById(Integer id) throws EntityStateException {
+        Tag tag = repository.findById(id)
+                .orElseThrow(() -> new EntityStateException("Tag with id " + id + " does not exist"));
+
+        for (Flashcard flashcard : flashcardService.readAllWithTags(Collections.singletonList(tag.getId()))) {
+            removeTagFromFlashcard(tag.getId(), flashcard.getId());
+        }
+
+        repository.delete(tag);
     }
 
 }

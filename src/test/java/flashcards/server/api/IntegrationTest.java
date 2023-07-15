@@ -1,5 +1,7 @@
 package flashcards.server.api;
 
+import flashcards.server.api.dto.UserDto;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +15,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+// We can do the same with postman or intellij idea http tests
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // tells Spring Boot to start a real HTTP server listening on a random port
 public class IntegrationTest {
 
@@ -30,21 +32,13 @@ public class IntegrationTest {
     @WithMockUser
     public void getUserShouldReturnUserDetails() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic YWRtaW46MTIz");  // replace "token" with your actual token
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        headers.set("Authorization", "Basic YWRtaW46MTIz");
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        ResponseEntity<String> response = restTemplate
-                .exchange("http://localhost:" + port + "/users", HttpMethod.GET, entity, String.class);
+        ResponseEntity<UserDto[]> response = restTemplate
+                .exchange("http://localhost:" + port + "/users", HttpMethod.GET, entity, UserDto[].class);
 
-//        ResponseEntity<String> response = restTemplate
-//                .exchange("http://localhost:" + port + "/users/{id}", HttpMethod.GET, entity, String.class, 1);
-
-//        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:" + port + "/users/{id}", String.class, 1);
-
-        System.out.println("Response: " + response);
-        logger.debug("DEBUG FROM LOGGER");
-        logger.info("INFO FROM LOGGER");
-//        assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
-//        assertThat(response.getBody()).contains("John Doe");
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals("admin", response.getBody()[0].getUsername());
     }
 }

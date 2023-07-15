@@ -2,8 +2,6 @@ package flashcards.server.business;
 
 import flashcards.server.domain.DomainEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -17,7 +15,7 @@ public abstract class AbstractCrudService<E extends DomainEntity<K>, K> {
 
     public E create(E entity) throws EntityStateException {
         if (entity.getId() != null && repository.existsById(entity.getId()))
-            throw new EntityStateException("entity " + entity + " already exists");
+            throw new EntityStateException("Entity " + entity + " already exists");
 
         return repository.save(entity);
     }
@@ -32,7 +30,7 @@ public abstract class AbstractCrudService<E extends DomainEntity<K>, K> {
 
     public void update(E entity) throws EntityStateException {
         if (!repository.existsById(entity.getId()))
-            throw new EntityStateException("entity " + entity + " does not exist");
+            throw new EntityStateException("Entity " + entity + " does not exist");
 
         repository.save(entity);
     }

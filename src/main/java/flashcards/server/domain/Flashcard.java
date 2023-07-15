@@ -11,17 +11,12 @@ import java.util.Set;
 public class Flashcard implements DomainEntity<Long> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String front;
 
     private String back;
-
-    // TODO: Do we need bidirectional relation here?
-    @ManyToOne
-    @JoinColumn(nullable = false, name = "author_username")
-    private User author;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( name = "tagged_flashcards",
@@ -29,19 +24,20 @@ public class Flashcard implements DomainEntity<Long> {
                 inverseJoinColumns = @JoinColumn(name = "tag_id") )
     private Set<Tag> tags = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "author_username")
+    private User author;
+
     public Flashcard() {
 
     }
 
-    public Flashcard(String front, String back, User author, Set<Tag> tags) {
+    public Flashcard(Long id, String front, String back, Set<Tag> tags, User author) {
+        this.id = id;
         this.front = front;
         this.back = back;
+        this.tags = tags;
         this.author = author;
-    }
-
-    public Flashcard(Long id, String front, String back, User author, Set<Tag> tags) {
-        this(front, back, author, tags);
-        this.id = id;
     }
 
     @Override
@@ -67,12 +63,10 @@ public class Flashcard implements DomainEntity<Long> {
 
     public void addTag(Tag tag) {
         tags.add(Objects.requireNonNull(tag));
-//        tag.getTaggedFlashcards().add(this);
     }
 
     public void removeTag(Tag tag) {
         tags.remove(tag);
-//        tag.getTaggedFlashcards().remove(this);
     }
 
     @Override
@@ -89,7 +83,6 @@ public class Flashcard implements DomainEntity<Long> {
     public int hashCode() {
         return getId() != null ? getId().hashCode() : 0;
     }
-
 
     @Override
     public String toString() {

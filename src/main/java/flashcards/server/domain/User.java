@@ -1,7 +1,6 @@
 package flashcards.server.domain;
 
 import javax.persistence.*;
-import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -16,8 +15,8 @@ public class User implements DomainEntity<String> {
     @Column(nullable = false)
     private boolean enabled = true;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Flashcard> createdFlashcards = new ArrayList<>();
+//    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<Flashcard> createdFlashcards = new ArrayList<>();
 
     public User() {
 
@@ -41,15 +40,6 @@ public class User implements DomainEntity<String> {
         return password;
     }
 
-    public List<Flashcard> getCreatedFlashcards() {
-        return Collections.unmodifiableList(createdFlashcards);
-    }
-
-    public void addFlashcard(Flashcard flashcard) {
-        createdFlashcards.add(Objects.requireNonNull(flashcard));
-    }
-
-    // TODO: Move equals & hashCode to the parent class
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,7 +52,7 @@ public class User implements DomainEntity<String> {
 
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        return getId() != null ? getId().hashCode() : 0;
     }
 
     @Override
@@ -70,7 +60,6 @@ public class User implements DomainEntity<String> {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", createdFlashcardsCount= " + createdFlashcards.size() +
                 '}';
     }
 }

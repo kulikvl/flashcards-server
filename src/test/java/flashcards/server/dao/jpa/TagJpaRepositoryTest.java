@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @DataJpaTest(showSql = true)
-public class FlashcardJpaRepositoryTest {
+public class TagJpaRepositoryTest {
 
     @Autowired
     private UserJpaRepository userJpaRepository;
@@ -20,18 +20,26 @@ public class FlashcardJpaRepositoryTest {
     @Autowired
     private FlashcardJpaRepository flashcardJpaRepository;
 
+    @Autowired
+    private TagJpaRepository tagJpaRepository;
+
     @Test
-    public void shouldFlashcardBeCreatedByUser() {
+    public void shouldTagBeAddedToFlashcard() {
         User user = new User("eliska", "{noop}123");
         user = userJpaRepository.save(user);
 
         Flashcard flashcard = new Flashcard(null, "F1", "B1", new HashSet<>(), user);
         flashcard = flashcardJpaRepository.save(flashcard);
 
-        List<Flashcard> flashcards = (List<Flashcard>) flashcardJpaRepository.findAllByAuthorUsername("eliska");
+        Tag tag = new Tag(null, "Fav", user);
+        tag = tagJpaRepository.save(tag);
 
-        Assertions.assertEquals(1, flashcards.size());
-        Assertions.assertEquals("eliska", flashcards.get(0).getAuthor().getUsername());
+        flashcard.addTag(tag);
+        flashcard = flashcardJpaRepository.save(flashcard);
+
+        List<Tag> tags = (List<Tag>) tagJpaRepository.findAllByFlashcardId(flashcard.getId());
+
+        Assertions.assertEquals(1, tags.size());
+        Assertions.assertEquals(tag.getId(), tags.get(0).getId());
     }
-
 }

@@ -1,7 +1,6 @@
 package flashcards.server.api.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.Set;
 
 public class FlashcardDto {
@@ -13,9 +12,21 @@ public class FlashcardDto {
 
     private String back;
 
+    private Set<TagDto> tags;
+
     private String authorUsername;
 
-    private Set<Integer> tagIds;
+    public FlashcardDto() {
+
+    }
+
+    public FlashcardDto(Long id, String front, String back, Set<TagDto> tags, String authorUsername) {
+        this.id = id;
+        this.front = front;
+        this.back = back;
+        this.tags = tags;
+        this.authorUsername = authorUsername;
+    }
 
     public Long getId() {
         return id;
@@ -41,19 +52,19 @@ public class FlashcardDto {
         this.back = back;
     }
 
+    public Set<TagDto> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<TagDto> tags) {
+        this.tags = tags;
+    }
+
     public String getAuthorUsername() {
         return authorUsername;
     }
 
     public void setAuthorUsername(String authorUsername) {
         this.authorUsername = authorUsername;
-    }
-
-    public Set<Integer> getTagIds() {
-        return tagIds;
-    }
-
-    public void setTagIds(Set<Integer> tagIds) {
-        this.tagIds = tagIds;
     }
 }
