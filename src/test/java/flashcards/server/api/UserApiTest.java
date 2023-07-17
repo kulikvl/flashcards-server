@@ -1,6 +1,8 @@
 package flashcards.server.api;
 
 import flashcards.server.business.UserService;
+import flashcards.server.dao.jpa.FlashcardJpaRepository;
+import flashcards.server.dao.jpa.TagJpaRepository;
 import flashcards.server.dao.jpa.UserJpaRepository;
 import flashcards.server.domain.User;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,12 @@ public class UserApiTest {
 
     @MockBean
     private UserJpaRepository userJpaRepository;
+
+    @MockBean
+    private FlashcardJpaRepository flashcardJpaRepository;
+
+    @MockBean
+    private TagJpaRepository tagJpaRepository;
 
 //    @MockBean
 //    private UserDetailsManager userDetailsManager;
