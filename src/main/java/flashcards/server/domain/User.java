@@ -1,6 +1,8 @@
 package flashcards.server.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -14,9 +16,6 @@ public class User implements DomainEntity<String> {
 
     @Column(nullable = false)
     private boolean enabled = true;
-
-//    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    private List<Flashcard> createdFlashcards = new ArrayList<>();
 
     public User() {
 

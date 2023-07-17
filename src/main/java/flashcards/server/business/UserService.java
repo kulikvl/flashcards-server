@@ -1,26 +1,32 @@
 package flashcards.server.business;
 
+import flashcards.server.dao.jpa.FlashcardJpaRepository;
+import flashcards.server.dao.jpa.TagJpaRepository;
 import flashcards.server.dao.jpa.UserJpaRepository;
+import flashcards.server.domain.Flashcard;
+import flashcards.server.domain.Tag;
 import flashcards.server.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService extends AbstractCrudService<User, String> {
 
     private final UserDetailsManager userDetailsManager;
+    private final FlashcardJpaRepository flashcardJpaRepository;
+    private final TagJpaRepository tagJpaRepository;
 
     @Autowired
-    public UserService(UserJpaRepository repository, UserDetailsManager userDetailsManager) {
+    public UserService(UserJpaRepository repository, UserDetailsManager userDetailsManager, FlashcardJpaRepository flashcardJpaRepository, TagJpaRepository tagJpaRepository) {
         super(repository);
         this.userDetailsManager = userDetailsManager;
+        this.flashcardJpaRepository = flashcardJpaRepository;
+        this.tagJpaRepository = tagJpaRepository;
     }
 
     private UserDetails createUserDetails(String username, String password) {
@@ -51,7 +57,24 @@ public class UserService extends AbstractCrudService<User, String> {
     }
 
     @Override
+    @Transactional
     public void deleteById(String id) {
+
+        Collection<Flashcard> flashcards = flashcardJpaRepository.findAllByAuthorUsername(id);
+
+        for (Flashcard flashcard : flashcards) {
+            flashcardJpaRepository.deleteById(flashcard.getId());
+        }
+
+        Collection<Tag> tags = tagJpaRepository.findAllByAuthorUsername(id);
+
+        for (Tag tag : tags) {
+            tagJpaRepository.deleteById(tag.getId());
+        }
+
+        flashcardJpaRepository.flush();
+        tagJpaRepository.flush();
+
         userDetailsManager.deleteUser(id);
     }
 
