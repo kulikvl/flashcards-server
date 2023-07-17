@@ -1,0 +1,44 @@
+image: openjdk:17-alpine
+
+stages:
+  - build
+  - test
+  - deploy
+
+before_script:
+  - echo `pwd` # debug
+  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+  - export GRADLE_USER_HOME=`pwd`/.gradle # Gradle uses the GRADLE_USER_HOME directory to store files such as cached dependencies, compiled scripts, etc.
+  - apk update && apk add findutils
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+build:
+  stage: build
+  only:
+    - master
+  script:
+    - ./gradlew bootJar
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1 week
+
+test:
+  stage: test
+  script:
+    - ./gradlew test
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  when: manual
+  script:
+    - echo "Here might be the deployment of the application"
+
+after_script:
+  - echo "End CI"
