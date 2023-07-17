@@ -13,8 +13,5 @@ import java.util.Optional;
 @Repository
 public interface UserJpaRepository extends JpaRepository<User, String> {
 
-//    @Query("SELECT t.author FROM Tag t WHERE t.id = :tagId")
-//    Optional<User> findUserByCreatedTagId(@Param("tagId") Integer tagId);
-
 }
 

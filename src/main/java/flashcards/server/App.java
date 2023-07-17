@@ -16,10 +16,11 @@ import org.springframework.context.ConfigurableApplicationContext;
         servers = {@Server(url = "http://localhost:8080")}
 )
 @SecurityScheme(
-        name = "basicAuth",  // This is the name that will be used to reference this scheme in the components section.
+        name = "BearerJWT",  // This is the name that will be used to reference this scheme in the components section.
         type = SecuritySchemeType.HTTP,
-        scheme = "basic",     // This indicates that we're using HTTP Basic Authentication.
-        description = "credentials needed"
+        scheme = "bearer",     // This indicates that we're using HTTP Basic Authentication.
+        bearerFormat = "JWT",
+        description = "Bearer token"
 )
 public class App {
     public static void main(String[] args) {

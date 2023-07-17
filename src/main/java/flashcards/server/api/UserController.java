@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/users")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Users")
+@SecurityRequirement(name = "BearerJWT")
 public class UserController extends AbstractController<User, UserDto, String> {
 
     @Autowired
@@ -33,10 +34,8 @@ public class UserController extends AbstractController<User, UserDto, String> {
     }
 
     @PostMapping
-    @SecurityRequirement(name = "basicAuth")
     @Operation(
             summary = "Create new user (only for admins)",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)), @ApiResponse(responseCode = "409", description = "User with the same ID (username) already exists")}
     )
     public UserDto create(@RequestBody UserDto dto) {
@@ -50,7 +49,6 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @GetMapping
     @Operation(
             summary = "Get all users (only for admins)",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK")}
     )
     public Collection<UserDto> readAll() {
@@ -60,7 +58,6 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @GetMapping("/{id}")
     @Operation(
             summary = "Get the user (only for admins)",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "User not found")}
     )
     public UserDto readOne(@PathVariable String id) {
@@ -74,7 +71,6 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @PutMapping
     @Operation(
             summary = "Update the user (only for admins)",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "User has been updated"), @ApiResponse(responseCode = "404", description = "User not found")}
     )
     public void update(@RequestBody UserDto dto) {
@@ -88,39 +84,11 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete the user (only for admins)",
-            security = {@SecurityRequirement(name = "basicAuth")}, // equivalent to separate annotation @SecurityRequirement(name = "basicAuth")
             responses = {@ApiResponse(responseCode = "200", description = "User has been deleted")} // but 204 = equivalent to separate annotation @ResponseStatus(HttpStatus.NO_CONTENT)
     )
     public void delete(@PathVariable String id) {
         service.deleteById(id);
     }
-
-    @PostMapping("/register")
-    @Operation(
-            summary = "Register new user",
-            responses = {@ApiResponse(responseCode = "200", description = "User has been registered"), @ApiResponse(responseCode = "409", description = "User with the username already exists")}
-    )
-    public void register(@RequestBody UserDto dto) {
-        try {
-            ((UserService)service).register(dto.getUsername(), dto.getPassword());
-        } catch (EntityStateException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        }
-    }
-
-    @PostMapping("/authenticate")
-    @Operation(
-            summary = "Authenticate the user",
-            responses = {@ApiResponse(responseCode = "200", description = "User has been successfully authenticated and his roles are returned"), @ApiResponse(responseCode = "403", description = "Authentication failed")}
-    )
-    public Collection<String> authenticate(@RequestBody UserDto dto) {
-        try {
-            return ((UserService)service).authenticate(dto.getUsername(), dto.getPassword());
-        } catch (BadCredentialsException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-    }
-
 
     // Just a list of all useful swagger annotations:
 //    @PutMapping("/test/{pv1}")

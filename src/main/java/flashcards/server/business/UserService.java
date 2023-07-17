@@ -55,40 +55,4 @@ public class UserService extends AbstractCrudService<User, String> {
         userDetailsManager.deleteUser(id);
     }
 
-//    public Optional<User> findUserByCreatedTagId(Integer tagId) {
-//        return ((UserJpaRepository) repository).findUserByCreatedTagId(tagId);
-//    }
-
-    public void register(String username, String password) throws EntityStateException {
-        if (userDetailsManager.userExists(username))
-            throw new EntityStateException("User " + username + " already exists");
-
-        UserDetails user = createUserDetails(username, password);
-
-        userDetailsManager.createUser(user);
-
-//        // print all users using reflection (for debugging and testing purposes)
-//        Field usersMapField = ReflectionUtils.findField(InMemoryUserDetailsManager.class, "users");
-//        ReflectionUtils.makeAccessible(usersMapField);
-//        Map map = (Map) ReflectionUtils.getField(usersMapField, (InMemoryUserDetailsManager) userDetailsManager);
-//        System.out.println(map);
-    }
-
-    public Collection<String> authenticate(String username, String password) throws BadCredentialsException{
-
-        if (!userDetailsManager.userExists(username))
-            throw new BadCredentialsException("User " + username + " does not exist");
-
-        UserDetails userDetails = userDetailsManager.loadUserByUsername(username);
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException("Incorrect password");
-        }
-
-        return userDetails.getAuthorities().stream()
-                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
-    }
-
 }

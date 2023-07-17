@@ -1,12 +1,11 @@
 ### Create user "eliska"
-POST http://{{host}}/users
-Authorization: Basic YWRtaW46MTIz
+POST http://{{host}}/auth/register
 Accept: application/json
 Content-Type: application/json
 
 {
   "username": "eliska",
-  "password": "21"
+  "password": "123"
 }
 
 > {%
@@ -17,7 +16,7 @@ Content-Type: application/json
 
 ### Create first flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NzIxLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.feoMR0RsV8OzftrJKvAeZ-Hy8dIjb72KAGbb2j928Pg
 Accept: application/json
 Content-Type: application/json
 
@@ -34,7 +33,7 @@ Content-Type: application/json
 
 ### Create second flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
@@ -45,7 +44,7 @@ Content-Type: application/json
 
 ### Create first tag for user "eliska"
 POST http://{{host}}/users/eliska/tags
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
@@ -61,7 +60,7 @@ Content-Type: application/json
 
 ### Create second tag for user "eliska"
 POST http://{{host}}/users/eliska/tags
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
@@ -71,7 +70,7 @@ Content-Type: application/json
 
 ### Add the first tag to first the flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards/1/tags/1
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
@@ -83,25 +82,25 @@ Content-Type: application/json
 
 ### Add the first tag to the second the flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards/2/tags/1
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
 ### Add the second tag to the second flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards/2/tags/2
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
 ### Add the second tag to first the flashcard for user "eliska"
 POST http://{{host}}/users/eliska/flashcards/1/tags/2
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
-### Remove the second tag from the first flashcard for user "eliska"
-DELETE http://{{host}}/users/eliska/flashcards/1/tags/2
-Authorization: Basic ZWxpc2thOjIx
+### Remove the second tag from the second flashcard for user "eliska"
+DELETE http://{{host}}/users/eliska/flashcards/2/tags/2
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 
@@ -113,7 +112,7 @@ Content-Type: application/json
 
 ### Get flashcards with the first tag
 GET http://{{host}}/users/eliska/flashcards?tags=1
-Authorization: Basic ZWxpc2thOjIx
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NDYwLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.JrLgJH7ZQSPMiuN8Qqv2m7JB-f6EFnTXbkeiGsk1dcA
 Accept: application/json
 Content-Type: application/json
 

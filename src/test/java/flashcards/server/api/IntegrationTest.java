@@ -32,7 +32,7 @@ public class IntegrationTest {
     @WithMockUser
     public void getUserShouldReturnUserDetails() {
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Basic YWRtaW46MTIz");
+        headers.setBearerAuth("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTQxNzM1LCJ1c2VybmFtZSI6ImFkbWluIn0.VQNvZwf-7PpaoBEbG0Ifp5-Ot4fmV9N7265BpSCvENI");
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         ResponseEntity<UserDto[]> response = restTemplate

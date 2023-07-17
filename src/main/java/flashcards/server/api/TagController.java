@@ -22,7 +22,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/users/{userId}")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Tags")
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirement(name = "BearerJWT")
 public class TagController extends AbstractController<Tag, TagDto, Integer>{
 
     @Autowired
@@ -38,7 +38,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Create new tag for the user",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)), @ApiResponse(responseCode = "409", description = "Tag with the same ID already exists")}
     )
     public TagDto create(@PathVariable String userId, @RequestBody TagDto dto) {
@@ -54,7 +53,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Get all the user's tags",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK")}
     )
     public Collection<TagDto> readAll(@PathVariable String userId) {
@@ -65,7 +63,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Get the user's tag",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Tag not found")}
     )
     public TagDto readOne(@PathVariable String userId, @PathVariable Integer id) {
@@ -80,7 +77,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Update the user's tag",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "Tag has been updated"), @ApiResponse(responseCode = "404", description = "Tag not found")}
     )
     public void update(@PathVariable String userId, @RequestBody TagDto dto, @PathVariable String id) {
@@ -96,7 +92,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Delete the user's tag",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "Tag has been deleted")}
     )
     public void delete(@PathVariable String userId, @PathVariable Integer id) {
@@ -107,7 +102,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Get all the tags of the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK")}
     )
     public Collection<TagDto> readAllByFlashcard(@PathVariable String userId, @PathVariable Long flashcardId) {
@@ -118,7 +112,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Add the tag to the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Tag or flashcard not found")}
     )
     public void addTagToFlashcard(@PathVariable String userId, @PathVariable Integer id, @PathVariable Long flashcardId) {
@@ -133,7 +126,6 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Remove the tag from the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Tag or flashcard not found")}
     )
     public void removeTagFromFlashcard(@PathVariable String userId, @PathVariable Integer id, @PathVariable Long flashcardId) {

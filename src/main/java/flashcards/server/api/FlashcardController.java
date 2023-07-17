@@ -23,7 +23,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/users/{userId}/flashcards")
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Flashcards")
-@SecurityRequirement(name = "basicAuth")
+@SecurityRequirement(name = "BearerJWT")
 public class FlashcardController extends AbstractController<Flashcard, FlashcardDto, Long> {
 
     @Autowired
@@ -59,7 +59,6 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Create new flashcard for the user",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)), @ApiResponse(responseCode = "409", description = "Username with the same ID already exists")}
     )
     public FlashcardDto create(@PathVariable String userId, @RequestBody FlashcardDto dto) {
@@ -75,7 +74,6 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Get all the user's flashcards",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK")}
     )
     public Collection<FlashcardDto> readAll(@PathVariable String userId, @RequestParam(name = "tags", required = false) Collection<Integer> tagIds) {
@@ -90,7 +88,6 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Get the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Flashcard not found")}
     )
     public FlashcardDto readOne(@PathVariable String userId, @PathVariable Long id) {
@@ -105,7 +102,6 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Update the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "Flashcard has been updated"), @ApiResponse(responseCode = "404", description = "Flashcard not found")}
     )
     public void update(@PathVariable String userId, @RequestBody FlashcardDto dto) {
@@ -121,7 +117,6 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Delete the user's flashcard",
-            security = {@SecurityRequirement(name = "basicAuth")},
             responses = {@ApiResponse(responseCode = "200", description = "Flashcard has been deleted")}
     )
     public void delete(@PathVariable String userId, @PathVariable Long id) {

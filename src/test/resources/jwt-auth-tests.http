@@ -1,0 +1,57 @@
+### Get all users 1x
+GET http://{{host}}/users
+Accept: application/json
+
+> {%
+    client.test("User is not authenticated", function() {
+        client.assert(response.status === 401)
+    });
+%}
+
+### Get all users 1x (random jwt)
+GET http://{{host}}/users
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5MTg3LCJ1c2VybmFtZSI6ImV4YW1wbGUifQ._iKJMocl-Yez9OWm80jh5ukb6QSQ4Oj_9XT4USJG2Ak
+Accept: application/json
+
+> {%
+    client.test("User is not authenticated", function() {
+        client.assert(response.status === 401)
+    });
+%}
+
+### Get all users 1x (random jwt)
+GET http://{{host}}/users
+Authorization: Bearer some_invalid_jwt_token
+Accept: application/json
+
+> {%
+    client.test("Internal error", function() {
+        client.assert(response.status === 500)
+    });
+%}
+
+### Get all users 2x
+GET http://{{host}}/users
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI4ODI3LCJ1c2VybmFtZSI6InRlc3QtdXNlcjEifQ.SJHVcUW2_AaXZp8R6IrCicTIvlixS7ZYDpJ5K0riXPk
+Accept: application/json
+
+> {%
+    client.test("User is not authorized", function() {
+        client.assert(response.status === 403)
+    });
+%}
+
+### Get user that does not exist
+GET http://{{host}}/users/nonexistingusername
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI4ODgxLCJ1c2VybmFtZSI6ImFkbWluIn0.VEXjY3Qn4Qdl2B8HeEbKLhG6nJWjT2IFYsQtKDJ9zLI
+Accept: application/json
+
+> {%
+    client.test("User does not exist", function() {
+        client.assert(response.status === 404)
+    });
+    client.test("User body contains not found", function() {
+        client.assert(response.body["error"].toLowerCase() === "not found")
+    })
+%}
+
