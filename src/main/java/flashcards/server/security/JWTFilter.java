@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +30,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // Checking if the header contains a Bearer token
         if(authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")){
+
             // Extract JWT
             String jwt = authHeader.substring(7);
 
@@ -42,7 +42,6 @@ public class JWTFilter extends OncePerRequestFilter {
             } else {
 
                 try {
-
                     // Verify token and extract username
                     String username = jwtUtil.validateTokenAndRetrieveSubject(jwt);
 
@@ -53,7 +52,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(username, userDetails.getPassword(), userDetails.getAuthorities());
 
-                    // Setting the authentication on the Security Context using the created token
+                    // Establish a security context after successfully validating the JWT, so we can do method-level security checks later based on the Authentication object
                     if (SecurityContextHolder.getContext().getAuthentication() == null){
                         SecurityContextHolder.getContext().setAuthentication(authToken);
                     }

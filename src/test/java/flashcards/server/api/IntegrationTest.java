@@ -15,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 
-
 // We can do the same with postman or intellij idea http tests
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // tells Spring Boot to start a real HTTP server listening on a random port
 public class IntegrationTest {
@@ -25,8 +24,6 @@ public class IntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate; // convenience class that is useful for integration tests. It simplifies interaction with HTTP servers, and translates errors into HttpClientErrorExceptions or HttpServerErrorExceptions
-
-    private static final Logger logger = LoggerFactory.getLogger(IntegrationTest.class);
 
     @Test
     @WithMockUser

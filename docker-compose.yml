@@ -1,9 +1,13 @@
 version: '3.7'
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    # Set environment variables for the container in which the Spring Boot app will be running.
+    # Spring Boot has a feature of "Externalized Configuration", that allows properties to be defined outside of the application. When Spring Boot starts up, it will look for properties defined in several locations, including environment variables.
+    # If it finds a property in an environment variable that matches one of its properties (like SPRING_DATASOURCE_URL), it will use the value from the environment variable.
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/my_database
       SPRING_DATASOURCE_USERNAME: my_user
@@ -15,7 +19,6 @@ services:
 
   db:
     image: postgres:latest
-#    restart: always
     environment:
       POSTGRES_DB: my_database
       POSTGRES_USER: my_user
@@ -26,4 +29,5 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
 volumes:
+  # postgres_data is the named volume, that is managed by Docker. It is stored in a specific directory on the host system. On Linux: /var/lib/docker/volumes/
   postgres_data:

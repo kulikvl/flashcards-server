@@ -11,18 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.MediaType;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
-
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-//  generally best to keep your tests focused on a single controller if possible
 @WebMvcTest(UserController.class)
 @Import({UserService.class}) // import additional configuration classes if your controller relies on beans that aren't automatically loaded by @WebMvcTest
 public class UserApiTest {
@@ -38,9 +34,6 @@ public class UserApiTest {
 
     @MockBean
     private TagJpaRepository tagJpaRepository;
-
-//    @MockBean
-//    private UserDetailsManager userDetailsManager;
 
     @Test
 //    @WithMockUser(username = "a", roles = {"b"}, password = "c")

@@ -6,15 +6,7 @@ stages:
   - deploy
 
 before_script:
-  - echo `pwd` # debug
-  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
-  - export GRADLE_USER_HOME=`pwd`/.gradle # Gradle uses the GRADLE_USER_HOME directory to store files such as cached dependencies, compiled scripts, etc.
-  - apk update && apk add findutils
-
-cache:
-  paths:
-    - .gradle/wrapper
-    - .gradle/caches
+  - apk update && apk add findutils # required for build and test scripts (./gradlew bootJar, ./gradlew test  use 'xargs')
 
 build:
   stage: build
@@ -41,4 +33,4 @@ deploy:
     - echo "Here might be the deployment of the application"
 
 after_script:
-  - echo "End CI"
+  - echo "End of CI"

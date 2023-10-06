@@ -90,42 +90,4 @@ public class UserController extends AbstractController<User, UserDto, String> {
         service.deleteById(id);
     }
 
-    // Just a list of all useful swagger annotations:
-//    @PutMapping("/test/{pv1}")
-//    // @Operation is wrapper interface
-//    @Operation(
-//        tags = {"TAG1", "TAG2", "TAG3"}, // best use names like: Users (for a group of operations related to managing users in your app), Payments, ... best in CamelCase
-////            operationId = "MY_OPERATION_ID",
-//            summary = "THIS_IS_MY_SUMMARY",
-//            description = "THIS_IS_MY_DESCRIPTION",
-////            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "THIS_IS_REQUEST_BODY_DESC", content = @Content(schema = @Schema(implementation = TagDto.class)))
-//            parameters = {@Parameter(name = "pv1", description = "MY_PV1_DESC", example = "3330")},
-//            hidden = false,
-//            externalDocs = @ExternalDocumentation(url = "http://google.com", description = "MY_EXTERNAL_DOCUM_DESC"),
-//            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = TagDto.class), mediaType = MediaType.APPLICATION_PDF_VALUE), description = "MY_200_DESC (FAKE CONTENT)")},
-//            security = {@SecurityRequirement(name = "BearerJWT")}
-//
-//    )
-//    public String testOpenAPIAnnotations(@PathVariable String pv1,
-//                                         @RequestBody UserDto userDto,
-//                                         @CookieValue(required = false) String COOKIE,
-//                                         @RequestHeader Boolean header,
-//                                         @RequestParam Boolean param) {
-//        return "testing..." + pv1 + " {" + userDto.getUsername() + ", " + userDto.getPassword() + "} " + COOKIE + " " + header + " " + param;
-//    }
-//
-//    @GetMapping("/greeting")
-//    @Operation(
-//            tags = {"TAG2", "TAG3"}
-//    )
-//    public String greeting() {
-//        return "Hello, World!";
-//    }
-//
-//    @GetMapping("/{userId}/secureGreeting")
-//    @PreAuthorize("authentication.name == #userId")
-//    public String secureGreeting(@PathVariable String userId) {
-//        return "Hello, World! SECURED";
-//    }
-
 }

@@ -1,13 +1,11 @@
 package flashcards.server.dao.jpa;
 
-import flashcards.server.domain.Flashcard;
 import flashcards.server.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
-import java.util.Optional;
 
 @DataJpaTest(showSql = true)
 public class UserJpaRepositoryTest {

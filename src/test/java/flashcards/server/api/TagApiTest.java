@@ -6,25 +6,19 @@ import flashcards.server.business.UserService;
 import flashcards.server.dao.jpa.FlashcardJpaRepository;
 import flashcards.server.dao.jpa.TagJpaRepository;
 import flashcards.server.dao.jpa.UserJpaRepository;
-import flashcards.server.domain.Flashcard;
 import flashcards.server.domain.Tag;
 import flashcards.server.domain.User;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 import java.util.List;
 import java.util.Optional;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TagController.class)
@@ -60,23 +54,6 @@ public class TagApiTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[*].id").exists())
                 .andExpect(jsonPath("$.[*].name").exists());
-
-//        String jsonData = "{\"username\":\"testuser\",\"password\":\"testpassword\"}";
-//
-//        mockMvc.perform(
-//                MockMvcRequestBuilders
-//                        .post("/users/krevetka/flashcards/1/tags")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(jsonData)
-//        )
-//                ;
-//        mockMvc.perform(MockMvcRequestBuilders.get("/user"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("Test User"));
-
-//        mockMvc.perform(MockMvcRequestBuilders.get("/users/krevetka/flashcards/1/tags"))
-//                .andDo(print());
 
     }
 }
