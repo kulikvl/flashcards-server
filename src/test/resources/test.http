@@ -1,0 +1,29 @@
+### Create user "eliska"
+POST http://{{host}}/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "eliska",
+  "password": "123"
+}
+
+
+### Here you can test
+POST http://{{host}}/users/eliska/flashcards
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NzIxLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.feoMR0RsV8OzftrJKvAeZ-Hy8dIjb72KAGbb2j928Pg
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 15,
+  "front": "f1",
+  "back": "b1"
+}
+
+
+### Here you can test
+GET http://{{host}}/users/eliska/flashcards
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJVc2VyIERldGFpbHMiLCJpc3MiOiJzZXJ2ZXIvZmxhc2hjYXJkcy9rdWxpa3ZsIiwiaWF0IjoxNjg5NTI5NzIxLCJ1c2VybmFtZSI6ImVsaXNrYSJ9.feoMR0RsV8OzftrJKvAeZ-Hy8dIjb72KAGbb2j928Pg
+Accept: application/json
+Content-Type: application/json

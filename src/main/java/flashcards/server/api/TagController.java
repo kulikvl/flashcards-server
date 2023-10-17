@@ -30,7 +30,7 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
         super(
                 service,
                 e -> new TagDto(e.getId(), e.getName(), e.getAuthor().getUsername()),
-                d -> new Tag(d.getId(), d.getName(), userService.readById(d.getAuthorUsername()).get())
+                d -> new Tag(d.getId(), d.getName(), userService.readById(d.getAuthorUsername()).orElseThrow(() -> new EntityStateException("Error while converting tag dto to entity - tagDto's author does not exist!")))
         );
     }
 
@@ -92,10 +92,14 @@ public class TagController extends AbstractController<Tag, TagDto, Integer>{
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Delete the user's tag",
-            responses = {@ApiResponse(responseCode = "200", description = "Tag has been deleted")}
+            responses = {@ApiResponse(responseCode = "200", description = "Tag has been deleted"), @ApiResponse(responseCode = "404", description = "Tag not found")}
     )
     public void delete(@PathVariable String userId, @PathVariable Integer id) {
-        service.deleteById(id);
+        try {
+            service.deleteById(id);
+        } catch (EntityStateException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/flashcards/{flashcardId}/tags")

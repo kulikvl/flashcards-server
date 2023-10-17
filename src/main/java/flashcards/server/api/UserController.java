@@ -68,12 +68,13 @@ public class UserController extends AbstractController<User, UserDto, String> {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Operation(
             summary = "Update the user (only for admins)",
             responses = {@ApiResponse(responseCode = "200", description = "User has been updated"), @ApiResponse(responseCode = "404", description = "User not found")}
     )
-    public void update(@RequestBody UserDto dto) {
+    public void update(@PathVariable String id, @RequestBody UserDto dto) {
+        dto.setUsername(id);
         try {
             service.update(toEntityConverter.apply(dto));
         } catch (EntityStateException e) {
@@ -84,10 +85,14 @@ public class UserController extends AbstractController<User, UserDto, String> {
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete the user (only for admins)",
-            responses = {@ApiResponse(responseCode = "200", description = "User has been deleted")} // but 204 = equivalent to separate annotation @ResponseStatus(HttpStatus.NO_CONTENT)
+            responses = {@ApiResponse(responseCode = "200", description = "User has been deleted"), @ApiResponse(responseCode = "404", description = "User not found")}
     )
     public void delete(@PathVariable String id) {
-        service.deleteById(id);
+        try {
+            service.deleteById(id);
+        } catch (EntityStateException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

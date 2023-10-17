@@ -35,7 +35,10 @@ public abstract class AbstractCrudService<E extends DomainEntity<K>, K> {
         repository.save(entity);
     }
 
-    public void deleteById(K id) {
+    public void deleteById(K id) throws EntityStateException {
+        if (!repository.existsById(id))
+            throw new EntityStateException("Entity with id " + id + " does not exist");
+
         repository.deleteById(id);
     }
 

@@ -88,7 +88,7 @@ public class AuthController {
 
     @GetMapping("/info")
     @Operation(
-            summary = "Get info about currently authenticated user (me)",
+            summary = "Get info about currently authenticated user",
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "401", description = "Authentication failed")}
     )
     public UserDetailsDto getUserDetails(){

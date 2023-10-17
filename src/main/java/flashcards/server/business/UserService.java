@@ -13,9 +13,12 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 @Service
 public class UserService extends AbstractCrudService<User, String> {
+
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final UserDetailsManager userDetailsManager;
     private final FlashcardJpaRepository flashcardJpaRepository;
@@ -56,24 +59,39 @@ public class UserService extends AbstractCrudService<User, String> {
         userDetailsManager.updateUser(createUserDetails(entity.getUsername(), entity.getPassword()));
     }
 
+//    @Override
+//    @Transactional
+//    public void deleteById(String id) {
+//
+//        Collection<Flashcard> flashcards = flashcardJpaRepository.findAllByAuthorUsername(id);
+//
+//        for (Flashcard flashcard : flashcards) {
+//            flashcardJpaRepository.deleteById(flashcard.getId());
+//        }
+//
+//        Collection<Tag> tags = tagJpaRepository.findAllByAuthorUsername(id);
+//
+//        for (Tag tag : tags) {
+//            tagJpaRepository.deleteById(tag.getId());
+//        }
+//
+//        flashcardJpaRepository.flush();
+//        tagJpaRepository.flush();
+//
+//        userDetailsManager.deleteUser(id);
+//    }
+
+    // suppose all the logic is handled on the client side
     @Override
-    @Transactional
     public void deleteById(String id) {
+        if (!userDetailsManager.userExists(id))
+            throw new EntityStateException("User with id " + id + " does not exist");
 
-        Collection<Flashcard> flashcards = flashcardJpaRepository.findAllByAuthorUsername(id);
-
-        for (Flashcard flashcard : flashcards) {
-            flashcardJpaRepository.deleteById(flashcard.getId());
+        // if user has any flashcards or tags => abort
+        if (!flashcardJpaRepository.findAllByAuthorUsername(id).isEmpty() || !tagJpaRepository.findAllByAuthorUsername(id).isEmpty()) {
+            logger.info("User " + id + " has flashcards or tags, so can't be deleted");
+            return;
         }
-
-        Collection<Tag> tags = tagJpaRepository.findAllByAuthorUsername(id);
-
-        for (Tag tag : tags) {
-            tagJpaRepository.deleteById(tag.getId());
-        }
-
-        flashcardJpaRepository.flush();
-        tagJpaRepository.flush();
 
         userDetailsManager.deleteUser(id);
     }

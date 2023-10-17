@@ -46,11 +46,11 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
 
                     if (d.getTags() != null) {
                         for (TagDto tagDto : d.getTags()) {
-                            tags.add(new Tag(tagDto.getId(), tagDto.getName(), userService.readById(tagDto.getAuthorUsername()).get()));
+                            tags.add(new Tag(tagDto.getId(), tagDto.getName(), userService.readById(tagDto.getAuthorUsername()).orElseThrow(() -> new EntityStateException("Error while converting flashcard dto to entity - tagDto's author does not exist!"))));
                         }
                     }
 
-                    return new Flashcard(d.getId(), d.getFront(), d.getBack(), tags, userService.readById(d.getAuthorUsername()).get());
+                    return new Flashcard(d.getId(), d.getFront(), d.getBack(), tags, userService.readById(d.getAuthorUsername()).orElseThrow(() -> new EntityStateException("Error while converting flashcard dto to entity - flashcardDto's author does not exist!")));
                 }
         );
     }
@@ -91,21 +91,18 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
             responses = {@ApiResponse(responseCode = "200", description = "OK"), @ApiResponse(responseCode = "404", description = "Flashcard not found")}
     )
     public FlashcardDto readOne(@PathVariable String userId, @PathVariable Long id) {
-        try {
-            return toDtoConverter.apply(service.readById(id).get());
-        } catch (NoSuchElementException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
+        return toDtoConverter.apply(service.readById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("authentication.name == #userId")
     @Operation(
             summary = "Update the user's flashcard",
             responses = {@ApiResponse(responseCode = "200", description = "Flashcard has been updated"), @ApiResponse(responseCode = "404", description = "Flashcard not found")}
     )
-    public void update(@PathVariable String userId, @RequestBody FlashcardDto dto) {
+    public void update(@PathVariable String userId, @PathVariable Long id, @RequestBody FlashcardDto dto) {
         dto.setAuthorUsername(userId);
+        dto.setId(id);
         try {
             service.update(toEntityConverter.apply(dto));
         } catch (EntityStateException e) {
@@ -117,10 +114,14 @@ public class FlashcardController extends AbstractController<Flashcard, Flashcard
     @PreAuthorize("hasRole('ADMIN') or authentication.name == #userId")
     @Operation(
             summary = "Delete the user's flashcard",
-            responses = {@ApiResponse(responseCode = "200", description = "Flashcard has been deleted")}
+            responses = {@ApiResponse(responseCode = "200", description = "Flashcard has been deleted"), @ApiResponse(responseCode = "404", description = "Flashcard not found")}
     )
     public void delete(@PathVariable String userId, @PathVariable Long id) {
-        service.deleteById(id);
+        try {
+            service.deleteById(id);
+        } catch (EntityStateException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

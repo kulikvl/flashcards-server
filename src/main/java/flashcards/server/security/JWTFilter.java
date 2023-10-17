@@ -48,7 +48,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     // Fetch User Details
                     UserDetails userDetails = userDetailsManager.loadUserByUsername(username);
 
-                    // Create Authentication Token
+                    // Create Authentication Token (userDetails.getPassword() is encrypted)
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(username, userDetails.getPassword(), userDetails.getAuthorities());
 
