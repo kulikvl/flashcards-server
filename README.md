@@ -1,10 +1,19 @@
-# Flashcards Server
+## Overview
 
-### Overview
-This is the backend (a Java REST API server) for the Flashcards Application. 
-Flashcards are used for memorization. My application is a simplified version of Anki.
+This is the backend component of the Flashcards Application, a Java REST API server built with Spring Boot. Flashcards, which are used for memorization, are the central focus of this application, offering a simplified alternative to Anki.
 
-swagger documentation is on http://localhost:8080/swagger-ui/index.html
+## Domain model
 
-### Domain model
 ![Domain model](./static/flashcards-domain-model.png)
+
+## Run
+
+```bash
+docker-compose up
+```
+
+## REST API
+
+The REST API is secured using JWT tokens.
+
+Swagger documentation can be accessed at http://localhost:8080/swagger-ui/index.html.
