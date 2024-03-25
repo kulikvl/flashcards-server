@@ -15,15 +15,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 
-// We can do the same with postman or intellij idea http tests
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) // tells Spring Boot to start a real HTTP server listening on a random port
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class IntegrationTest {
 
-    @LocalServerPort // inject the HTTP port that got allocated at runtime
+    @LocalServerPort
     private int port;
 
     @Autowired
-    private TestRestTemplate restTemplate; // convenience class that is useful for integration tests. It simplifies interaction with HTTP servers, and translates errors into HttpClientErrorExceptions or HttpServerErrorExceptions
+    private TestRestTemplate restTemplate;
 
     @Test
     @WithMockUser

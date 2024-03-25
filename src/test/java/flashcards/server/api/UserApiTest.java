@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
-@Import({UserService.class}) // import additional configuration classes if your controller relies on beans that aren't automatically loaded by @WebMvcTest
+@Import({UserService.class})
 public class UserApiTest {
 
     @Autowired
@@ -36,8 +36,7 @@ public class UserApiTest {
     private TagJpaRepository tagJpaRepository;
 
     @Test
-//    @WithMockUser(username = "a", roles = {"b"}, password = "c")
-    @WithMockUser // set up a mock user for your tests. This annotation sets up a SecurityContext for the test, which makes the system believe that there's a logged-in user.
+    @WithMockUser
     public void shouldReturnOneUser() throws Exception {
         User user = new User("eliska", "{noop}123");
 
@@ -46,7 +45,7 @@ public class UserApiTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/users").accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].username").value("eliska")) // JSONPath expression language is like XPath for JSON and can be used to traverse JSON structures and extract data from them. It begins with $, which represents the root of the JSON document.
+                .andExpect(jsonPath("$.[0].username").value("eliska"))
                 .andExpect(jsonPath("$.[1].username").doesNotExist());
 
     }

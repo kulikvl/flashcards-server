@@ -53,11 +53,6 @@ public class TagService extends AbstractCrudService<Tag, Integer> {
         flashcardService.update(flashcard);
     }
 
-    /*
-        Spring Data Jpa's repository methods such as save(), delete(), ... are @Transactional.
-        But if we are dealing with multiple operations (findById, removeTagFromFlashcard, deleteTag) that should be part of a single transaction (like here)
-        We should use @Transactional at the service method level
-     */
     @Override
     @Transactional
     public void deleteById(Integer id) throws EntityStateException {

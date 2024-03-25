@@ -59,29 +59,6 @@ public class UserService extends AbstractCrudService<User, String> {
         userDetailsManager.updateUser(createUserDetails(entity.getUsername(), entity.getPassword()));
     }
 
-//    @Override
-//    @Transactional
-//    public void deleteById(String id) {
-//
-//        Collection<Flashcard> flashcards = flashcardJpaRepository.findAllByAuthorUsername(id);
-//
-//        for (Flashcard flashcard : flashcards) {
-//            flashcardJpaRepository.deleteById(flashcard.getId());
-//        }
-//
-//        Collection<Tag> tags = tagJpaRepository.findAllByAuthorUsername(id);
-//
-//        for (Tag tag : tags) {
-//            tagJpaRepository.deleteById(tag.getId());
-//        }
-//
-//        flashcardJpaRepository.flush();
-//        tagJpaRepository.flush();
-//
-//        userDetailsManager.deleteUser(id);
-//    }
-
-    // suppose all the logic is handled on the client side
     @Override
     public void deleteById(String id) {
         if (!userDetailsManager.userExists(id))

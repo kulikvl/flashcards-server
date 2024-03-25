@@ -16,9 +16,6 @@ public class Tag implements DomainEntity<Integer> {
     @JoinColumn(nullable = false, name = "author_username")
     private User author;
 
-//    @ManyToMany(mappedBy = "tags")
-//    private Set<Flashcard> taggedFlashcards = new HashSet<>();
-
     public Tag() {
 
     }
